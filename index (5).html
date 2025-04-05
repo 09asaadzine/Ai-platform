@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Platform - Home</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap">
+<style>
+  :root {
+    /* Light mode colors */
+    --bg-main: #f8f9fa;
+    --bg-sidebar: #ffffff;
+    --bg-chat: #ffffff;
+    --bg-input: #ffffff;
+    --color-text: #333333;
+    --color-text-secondary: #6c757d;
+    --color-border: #e4e6eb;
+    --color-user-msg: #e9f5ff;
+    --color-bot-msg: #ffffff;
+    --color-user-text: #0a66c2;
+    --color-bot-text: #333333;
+    --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    --btn-primary: #0a66c2;
+    --btn-primary-hover: #0958a8;
+    --btn-secondary: #f0f2f5;
+    --btn-secondary-hover: #e4e6eb;
+    --btn-send: #0a66c2;
+    --btn-send-hover: #0958a8;
+    --btn-danger: #dc3545;
+    --btn-danger-hover: #bb2d3b;
+    --history-item: #f0f2f5;
+    --history-item-hover: #e4e6eb;
+    --card-bg: #ffffff;
+    --card-border: #e4e6eb;
+    --card-hover: #f8f9fa;
+    --font-family-en: 'Poppins', sans-serif;
+    --font-family-ar: 'Tajawal', sans-serif;
+  }
+
+  [data-theme="dark"] {
+    /* Dark mode colors */
+    --bg-main: #1a1d21;
+    --bg-sidebar: #242526;
+    --bg-chat: #1a1d21;
+    --bg-input: #3a3b3c;
+    --color-text: #e4e6eb;
+    --color-text-secondary: #b0b3b8;
+    --color-border: #3a3b3c;
+    --color-user-msg: #0a66c2;
+    --color-bot-msg: #3a3b3c;
+    --color-user-text: #ffffff;
+    --color-bot-text: #e4e6eb;
+    --shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    --btn-primary: #0a66c2;
+    --btn-primary-hover: #0958a8;
+    --btn-secondary: #3a3b3c;
+    --btn-secondary-hover: #4e4f50;
+    --btn-send: #0a66c2;
+    --btn-send-hover: #0958a8;
+    --btn-danger: #dc3545;
+    --btn-danger-hover: #bb2d3b;
+    --history-item: #3a3b3c;
+    --history-item-hover: #4e4f50;
+    --card-bg: #242526;
+    --card-border: #3a3b3c;
+    --card-hover: #2d2e2f;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-family-en);
+    display: flex;
+    height: 100vh;
+    background-color: var(--bg-main);
+    color: var(--color-text);
+    position: relative;
+    overflow: hidden;
+  }
+
+  body[lang="ar"] {
+    font-family: var(--font-family-ar);
+    direction: rtl;
+  }
+
+  .app-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  body[lang="ar"] .app-container {
+    flex-direction: row-reverse;
+  }
+
+  .sidebar {
+    width: 280px;
+    min-width: 280px;
+    background-color: var(--bg-sidebar);
+    border-left: 1px solid var(--color-border);
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    z-index: 100;
+    height: 100%;
+  }
+
+  body[lang="ar"] .sidebar {
+    border-left: none;
+    border-right: 1px solid var(--color-border);
+  }
+
+  .sidebar.hidden {
+    margin-right: -280px;
+    min-width: 0;
+  }
+
+  body[lang="ar"] .sidebar.hidden {
+    margin-right: 0;
+    margin-left: -280px;
+  }
+
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .sidebar h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--color-text);
+  }
+
+  .history-item {
+    background-color: var(--history-item);
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .history-item:hover {
+    background-color: var(--history-item-hover);
+    transform: translateY(-2px);
+  }
+
+  .history-item::before {
+    content: "💬";
+    margin-right: 8px;
+    font-size: 16px;
+  }
+
+  body[lang="ar"] .history-item::before {
+    margin-right: 0;
+    margin-left: 8px;
+  }
+
+  .history-item .delete-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--btn-danger);
+    color: white;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  body[lang="ar"] .history-item .delete-btn {
+    right: auto;
+    left: 10px;
+  }
+
+  .history-item:hover .delete-btn {
+    opacity: 1;
+  }
+
+  .history-item .delete-btn:hover {
+    background-color: var(--btn-danger-hover);
+  }
+
+  .chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 30px;
+    background-color: var(--bg-chat);
+    transition: all 0.3s ease;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .chat-title {
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .model-selector {
+    margin-left: 15px;
+  }
+
+  body[lang="ar"] .model-selector {
+    margin-left: 0;
+    margin-right: 15px;
+  }
+
+  .model-selector select {
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    background-color: var(--bg-sidebar);
+    color: var(--color-text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .model-selector select:hover {
+    border-color: var(--btn-primary);
+  }
+
+  .chat-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .chat-box {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body[lang="ar"] .chat-box {
+    padding-right: 0;
+    padding-left: 10px;
+  }
+
+  .message {
+    padding: 12px 18px;
+    border-radius: 18px;
+    margin-bottom: 15px;
+    max-width: 75%;
+    line-height: 1.5;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .user {
+    align-self: flex-end;
+    background-color: var(--color-user-msg);
+    color: var(--color-user-text);
+    border-bottom-right-radius: 4px;
+  }
+
+  body[lang="ar"] .user {
+    border-bottom-right-radius: 18px;
+    border-bottom-left-radius: 4px;
+  }
+
+  .bot {
+    align-self: flex-start;
+    background-color: var(--color-bot-msg);
+    color: var(--color-bot-text);
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--color-border);
+  }
+
+  body[lang="ar"] .bot {
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 4px;
+  }
+
+  .model-info {
+    font-size: 10px;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .input-container {
+    margin-top: auto;
+  }
+
+  .input-box {
+    display: flex;
+    background-color: var(--bg-input);
+    border-radius: 24px;
+    padding: 8px 8px 8px 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-border);
+  }
+
+  body[lang="ar"] .input-box {
+    padding: 8px 20px 8px 8px;
+  }
+
+  .input-box input {
+    flex: 1;
+    padding: 10px 0;
+    font-size: 16px;
+    border: none;
+    background: transparent;
+    color: var(--color-text);
+    font-family: inherit;
+    outline: none;
+  }
+
+  .input-box input::placeholder {
+    color: var(--color-text-secondary);
+  }
+
+  .input-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .input-box button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: var(--btn-send);
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .input-box button:hover {
+    background-color: var(--btn-send-hover);
+    transform: translateY(-2px);
+  }
+
+  .input-box button:disabled {
+    background-color: var(--btn-secondary);
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .file-upload {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .file-upload input[type=file] {
+    position: absolute;
+    font-size: 100px;
+    opacity: 0;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+  }
+
+  body[lang="ar"] .file-upload input[type=file] {
+    right: auto;
+    left: 0;
+  }
+
+  .file-upload-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--btn-secondary);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .file-upload-btn:hover {
+    background-color: var(--btn-secondary-hover);
+  }
+
+  .file-upload-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-text);
+  }
+
+  .sidebar-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .clear-all-btn {
+    padding: 8px 16px;
+    background-color: var(--btn-danger);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .clear-all-btn:hover {
+    background-color: var(--btn-danger-hover);
+  }
+
+  .new-chat-btn {
+    margin-top: 10px;
+    padding: 12px 16px;
+    background-color: var(--btn-primary);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    width: 100%;
+  }
+
+  .new-chat-btn:hover {
+    background-color: var(--btn-primary-hover);
+    transform: translateY(-2px);
+  }
+
+  .new-chat-btn::before {
+    content: "+";
+    margin-right: 8px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  body[lang="ar"] .new-chat-btn::before {
+    margin-right: 0;
+    margin-left: 8px;
+  }
+
+  .theme-toggle, .sidebar-toggle, .language-toggle {
+    background-color: var(--btn-secondary);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .theme-toggle:hover, .sidebar-toggle:hover, .language-toggle:hover {
+    background-color: var(--btn-secondary-hover);
+  }
+
+  .theme-toggle svg, .sidebar-toggle svg, .language-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-text);
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
+  }
+
+  .file-preview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: var(--bg-input);
+    border-radius: 8px;
+    border: 1px dashed var(--color-border);
+  }
+
+  .file-preview img {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 4px;
+  }
+
+  .file-preview-info {
+    flex: 1;
+  }
+
+  .file-preview-name {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .file-preview-size {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+  }
+
+  .file-preview-remove {
+    background: none;
+    border: none;
+    color: var(--btn-danger);
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  /* AI Tools Directory Styles */
+  .ai-directory {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px 0;
+    overflow-y: auto;
+  }
+
+  .directory-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .directory-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .directory-header p {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+  }
+
+  .category-section {
+    margin-bottom: 30px;
+  }
+
+  .category-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  .category-title svg {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+  }
+
+  body[lang="ar"] .category-title svg {
+    margin-right: 0;
+    margin-left: 8px;
+  }
+
+  .ai-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+  }
+
+  .ai-tool-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .ai-tool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background-color: var(--card-hover);
+  }
+
+  .tool-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+
+  .tool-name {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .tool-description {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+    flex-grow: 1;
+  }
+
+  .tool-tag {
+    display: inline-block;
+    background-color: var(--btn-secondary);
+    color: var(--color-text-secondary);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-right: 5px;
+  }
+
+  body[lang="ar"] .tool-tag {
+    margin-right: 0;
+    margin-left: 5px;
+  }
+
+  .view-all-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: var(--btn-secondary);
+    color: var(--color-text);
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .view-all-btn:hover {
+    background-color: var(--btn-secondary-hover);
+  }
+
+  .chat-mode-toggle {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--btn-secondary);
+    border-radius: 20px;
+    padding: 5px;
+    display: flex;
+    z-index: 10;
+    box-shadow: var(--shadow);
+  }
+
+  .mode-btn {
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .mode-btn.active {
+    background-color: var(--btn-primary);
+    color: white;
+  }
+
+  .typing-indicator {
+    display: flex;
+    align-items: center;
+    padding: 10px 18px;
+    border-radius: 18px;
+    margin-bottom: 15px;
+    align-self: flex-start;
+    background-color: var(--color-bot-msg);
+    color: var(--color-bot-text);
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  body[lang="ar"] .typing-indicator {
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 4px;
+  }
+
+  .typing-indicator span {
+    height: 8px;
+    width: 8px;
+    margin: 0 2px;
+    background-color: var(--color-text-secondary);
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.4;
+  }
+
+  .typing-indicator span:nth-child(1) {
+    animation: pulse 1s infinite;
+  }
+
+  .typing-indicator span:nth-child(2) {
+    animation: pulse 1s infinite 0.2s;
+  }
+
+  .typing-indicator span:nth-child(3) {
+    animation: pulse 1s infinite 0.4s;
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 0.4;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+    100% {
+      opacity: 0.4;
+      transform: scale(1);
+    }
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+
+  [data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .app-container {
+      flex-direction: column-reverse;
+    }
+
+    body[lang="ar"] .app-container {
+      flex-direction: column-reverse;
+    }
+
+    .sidebar {
+      width: 100%;
+      height: 40%;
+      min-width: 100%;
+      border-left: none;
+      border-top: 1px solid var(--color-border);
+      position: fixed;
+      bottom: 0;
+      right: 0;
+    }
+
+    body[lang="ar"] .sidebar {
+      right: auto;
+      left: 0;
+      border-right: none;
+    }
+
+    .sidebar.hidden {
+      transform: translateY(100%);
+      margin-right: 0;
+    }
+
+    body[lang="ar"] .sidebar.hidden {
+      margin-left: 0;
+      transform: translateY(100%);
+    }
+
+    .chat-container {
+      height: 100%;
+      padding-bottom: 0;
+    }
+
+    .ai-tools-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .chat-mode-toggle {
+      top: 70px;
+    }
+  }
+</style>
+</head>
+<body lang="en" dir="ltr">
+<div class="app-container">
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="chat-title" data-en="AI Assistant" data-ar="المساعد الذكي">AI Assistant</div>
+      <div class="model-selector">
+        <select id="aiModelSelect" title="Select AI Model">
+          <option value="gpt-3.5">ChatGPT 3.5</option>
+          <option value="gpt-4">ChatGPT 4</option>
+          <option value="claude">Claude</option>
+          <option value="llama">Meta Llama</option>
+          <option value="gemini">Google Gemini</option>
+        </select>
+      </div>
+      <div class="chat-actions">
+        <button class="language-toggle" id="languageToggle" title="Toggle language">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+            <path d="M2 12h20"></path>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+        </button>
+        <button class="sidebar-toggle" id="sidebarToggle" title="Toggle sidebar">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="9" y1="3" x2="9" y2="21"></line>
+          </svg>
+        </button>
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="themeIcon">
+            <path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="chat-mode-toggle">
+      <button class="mode-btn active" id="chatModeBtn" data-en="Chat" data-ar="محادثة">Chat</button>
+      <button class="mode-btn" id="directoryModeBtn" data-en="AI Tools" data-ar="أدوات الذكاء">AI Tools</button>
+    </div>
+
+    <div class="chat-box" id="chatBox"></div>
+    <div id="filePreviewContainer"></div>
+
+    <!-- AI Tools Directory -->
+    <div class="ai-directory" id="aiDirectory" style="display: none;">
+      <div class="directory-header">
+        <h2 data-en="Free AI Tools Directory" data-ar="دليل أدوات الذكاء الاصطناعي المجانية">Free AI Tools Directory</h2>
+        <p data-en="Discover and use free AI tools from around the world" data-ar="اكتشف واستخدم أدوات الذكاء الاصطناعي المجانية من جميع أنحاء العالم">Discover and use free AI tools from around the world</p>
+      </div>
+
+      <!-- Text & Content Generation -->
+      <div class="category-section">
+        <div class="category-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span data-en="Text & Content Generation" data-ar="إنشاء النصوص والمحتوى">Text & Content Generation</span>
+        </div>
+        <div class="ai-tools-grid">
+          <div class="ai-tool-card" onclick="window.open('https://chat.openai.com/', '_blank')">
+            <div class="tool-icon" style="background-color: #10a37f; color: white;">🤖</div>
+            <div class="tool-name">ChatGPT</div>
+            <div class="tool-description" data-en="Advanced AI chatbot for conversations, content creation, and problem-solving." data-ar="روبوت محادثة ذكي متقدم للمحادثات وإنشاء المحتوى وحل المشكلات.">Advanced AI chatbot for conversations, content creation, and problem-solving.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Tier" data-ar="طبقة مجانية">Free Tier</span>
+              <span class="tool-tag" data-en="Popular" data-ar="شائع">Popular</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://www.copy.ai/', '_blank')">
+            <div class="tool-icon" style="background-color: #2d46c8; color: white;">📝</div>
+            <div class="tool-name">Copy.ai</div>
+            <div class="tool-description" data-en="AI copywriting tool for marketing content, blogs, and social media posts." data-ar="أداة كتابة ذكية لمحتوى التسويق والمدونات ومنشورات وسائل التواصل الاجتماعي.">AI copywriting tool for marketing content, blogs, and social media posts.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Tier" data-ar="طبقة مجانية">Free Tier</span>
+              <span class="tool-tag" data-en="Marketing" data-ar="تسويق">Marketing</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://www.jasper.ai/', '_blank')">
+            <div class="tool-icon" style="background-color: #ff8c00; color: white;">✍️</div>
+            <div class="tool-name">Jasper</div>
+            <div class="tool-description" data-en="AI writing assistant for long-form content, blogs, and marketing copy." data-ar="مساعد كتابة ذكي للمحتوى الطويل والمدونات ونسخ التسويق.">AI writing assistant for long-form content, blogs, and marketing copy.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Trial" data-ar="تجربة مجانية">Free Trial</span>
+              <span class="tool-tag" data-en="Content" data-ar="محتوى">Content</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://quillbot.com/', '_blank')">
+            <div class="tool-icon" style="background-color: #4caf50; color: white;">🔄</div>
+            <div class="tool-name">QuillBot</div>
+            <div class="tool-description" data-en="AI-powered paraphrasing tool to rewrite and enhance text." data-ar="أداة إعادة صياغة مدعومة بالذكاء الاصطناعي لإعادة كتابة النص وتحسينه.">AI-powered paraphrasing tool to rewrite and enhance text.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Tier" data-ar="طبقة مجانية">Free Tier</span>
+              <span class="tool-tag" data-en="Writing" data-ar="كتابة">Writing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Generation -->
+      <div class="category-section">
+        <div class="category-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          <span data-en="Image Generation" data-ar="إنشاء الصور">Image Generation</span>
+        </div>
+        <div class="ai-tools-grid">
+          <div class="ai-tool-card" onclick="window.open('https://www.midjourney.com/', '_blank')">
+            <div class="tool-icon" style="background-color: #000000; color: white;">🎨</div>
+            <div class="tool-name">Midjourney</div>
+            <div class="tool-description" data-en="AI art generator creating stunning images from text descriptions." data-ar="مولد فني ذكي ينشئ صورًا مذهلة من وصف نصي.">AI art generator creating stunning images from text descriptions.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Trial" data-ar="تجربة مجانية">Free Trial</span>
+              <span class="tool-tag" data-en="Art" data-ar="فن">Art</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://www.craiyon.com/', '_blank')">
+            <div class="tool-icon" style="background-color: #ff4081; color: white;">🖼️</div>
+            <div class="tool-name">Craiyon</div>
+            <div class="tool-description" data-en="Free AI image generator (formerly DALL-E mini) for creative visuals." data-ar="مولد صور ذكي مجاني (سابقًا DALL-E mini) للصور الإبداعية.">Free AI image generator (formerly DALL-E mini) for creative visuals.</div>
+            <div>
+              <span class="tool-tag" data-en="Free" data-ar="مجاني">Free</span>
+              <span class="tool-tag" data-en="Creative" data-ar="إبداعي">Creative</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://leonardo.ai/', '_blank')">
+            <div class="tool-icon" style="background-color: #673ab7; color: white;">🌟</div>
+            <div class="tool-name">Leonardo.ai</div>
+            <div class="tool-description" data-en="AI platform for generating creative assets and artwork." data-ar="منصة ذكاء اصطناعي لإنشاء أصول وأعمال فنية إبداعية.">AI platform for generating creative assets and artwork.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Tier" data-ar="طبقة مجانية">Free Tier</span>
+              <span class="tool-tag" data-en="Design" data-ar="تصميم">Design</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://www.fotor.com/features/ai-image-generator/', '_blank')">
+            <div class="tool-icon" style="background-color: #2196f3; color: white;">📸</div>
+            <div class="tool-name">Fotor AI</div>
+            <div class="tool-description" data-en="Free AI image generator with photo editing capabilities." data-ar="مولد صور ذكي مجاني مع إمكانيات تحرير الصور.">Free AI image generator with photo editing capabilities.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Tier" data-ar="طبقة مجانية">Free Tier</span>
+              <span class="tool-tag" data-en="Photos" data-ar="صور">Photos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video & Audio -->
+      <div class="category-section">
+        <div class="category-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="23 7 16 12 23 17 23 7"></polygon>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+          </svg>
+          <span data-en="Video & Audio" data-ar="فيديو وصوت">Video & Audio</span>
+        </div>
+        <div class="ai-tools-grid">
+          <div class="ai-tool-card" onclick="window.open('https://www.synthesia.io/', '_blank')">
+            <div class="tool-icon" style="background-color: #e91e63; color: white;">🎬</div>
+            <div class="tool-name">Synthesia</div>
+            <div class="tool-description" data-en="AI video generation with virtual avatars from text scripts." data-ar="إنشاء فيديو ذكي مع شخصيات افتراضية من نصوص.">AI video generation with virtual avatars from text scripts.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Trial" data-ar="تجربة مجانية">Free Trial</span>
+              <span class="tool-tag" data-en="Video" data-ar="فيديو">Video</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://murf.ai/', '_blank')">
+            <div class="tool-icon" style="background-color: #3f51b5; color: white;">🎙️</div>
+            <div class="tool-name">Murf.ai</div>
+            <div class="tool-description" data-en="AI voice generator with natural-sounding voices in multiple languages." data-ar="مولد صوت ذكي بأصوات طبيعية بلغات متعددة.">AI voice generator with natural-sounding voices in multiple languages.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Tier" data-ar="طبقة مجانية">Free Tier</span>
+              <span class="tool-tag" data-en="Voice" data-ar="صوت">Voice</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://www.descript.com/', '_blank')">
+            <div class="tool-icon" style="background-color: #607d8b; color: white;">🎵</div>
+            <div class="tool-name">Descript</div>
+            <div class="tool-description" data-en="AI-powered audio and video editing platform with transcription features." data-ar="منصة تحرير صوت وفيديو مدعومة بالذكاء الاصطناعي مع ميزات النسخ.">AI-powered audio and video editing platform with transcription features.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Tier" data-ar="طبقة مجانية">Free Tier</span>
+              <span class="tool-tag" data-en="Editing" data-ar="تحرير">Editing</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://www.lalal.ai/', '_blank')">
+            <div class="tool-icon" style="background-color: #ff5722; color: white;">🔊</div>
+            <div class="tool-name">Lalal.ai</div>
+            <div class="tool-description" data-en="AI-powered vocal and instrumental track separation tool." data-ar="أداة فصل المسارات الصوتية والآلية مدعومة بالذكاء الاصطناعي.">AI-powered vocal and instrumental track separation tool.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Trial" data-ar="تجربة مجانية">Free Trial</span>
+              <span class="tool-tag" data-en="Audio" data-ar="صوت">Audio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coding & Development -->
+      <div class="category-section">
+        <div class="category-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <span data-en="Coding & Development" data-ar="البرمجة والتطوير">Coding & Development</span>
+        </div>
+        <div class="ai-tools-grid">
+          <div class="ai-tool-card" onclick="window.open('https://github.com/features/copilot', '_blank')">
+            <div class="tool-icon" style="background-color: #24292e; color: white;">💻</div>
+            <div class="tool-name">GitHub Copilot</div>
+            <div class="tool-description" data-en="AI pair programmer that suggests code completions as you type." data-ar="مبرمج مساعد ذكي يقترح إكمال الكود أثناء الكتابة.">AI pair programmer that suggests code completions as you type.</div>
+            <div>
+              <span class="tool-tag" data-en="Free for Students" data-ar="مجاني للطلاب">Free for Students</span>
+              <span class="tool-tag" data-en="Coding" data-ar="برمجة">Coding</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://www.tabnine.com/', '_blank')">
+            <div class="tool-icon" style="background-color: #4285f4; color: white;">⌨️</div>
+            <div class="tool-name">Tabnine</div>
+            <div class="tool-description" data-en="AI code completion tool supporting multiple programming languages." data-ar="أداة إكمال الكود الذكية التي تدعم لغات برمجة متعددة.">AI code completion tool supporting multiple programming languages.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Tier" data-ar="طبقة مجانية">Free Tier</span>
+              <span class="tool-tag" data-en="IDE" data-ar="بيئة تطوير">IDE</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://www.replit.com/ghostwriter', '_blank')">
+            <div class="tool-icon" style="background-color: #f26207; color: white;">👻</div>
+            <div class="tool-name">Replit Ghostwriter</div>
+            <div class="tool-description" data-en="AI coding assistant that helps write, debug, and explain code." data-ar="مساعد برمجة ذكي يساعد في كتابة وتصحيح وشرح الكود.">AI coding assistant that helps write, debug, and explain code.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Tier" data-ar="طبقة مجانية">Free Tier</span>
+              <span class="tool-tag" data-en="Assistant" data-ar="مساعد">Assistant</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://www.blackbox.ai/', '_blank')">
+            <div class="tool-icon" style="background-color: #000000; color: white;">🧠</div>
+            <div class="tool-name">Blackbox AI</div>
+            <div class="tool-description" data-en="AI coding assistant that helps with code generation and debugging." data-ar="مساعد برمجة ذكي يساعد في إنشاء الكود وتصحيح الأخطاء.">AI coding assistant that helps with code generation and debugging.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Tier" data-ar="طبقة مجانية">Free Tier</span>
+              <span class="tool-tag" data-en="VSCode" data-ar="فيجوال ستوديو كود">VSCode</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education & Learning -->
+      <div class="category-section">
+        <div class="category-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+          <span data-en="Education & Learning" data-ar="التعليم والتعلم">Education & Learning</span>
+        </div>
+        <div class="ai-tools-grid">
+          <div class="ai-tool-card" onclick="window.open('https://www.duolingo.com/', '_blank')">
+            <div class="tool-icon" style="background-color: #58cc02; color: white;">🦉</div>
+            <div class="tool-name">Duolingo</div>
+            <div class="tool-description" data-en="AI-powered language learning platform with personalized lessons." data-ar="منصة تعلم لغات مدعومة بالذكاء الاصطناعي مع دروس مخصصة.">AI-powered language learning platform with personalized lessons.</div>
+            <div>
+              <span class="tool-tag" data-en="Free" data-ar="مجاني">Free</span>
+              <span class="tool-tag" data-en="Languages" data-ar="لغات">Languages</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://quizlet.com/', '_blank')">
+            <div class="tool-icon" style="background-color: #4257b2; color: white;">📚</div>
+            <div class="tool-name">Quizlet</div>
+            <div class="tool-description" data-en="AI-enhanced study tools with flashcards and practice tests." data-ar="أدوات دراسة معززة بالذكاء الاصطناعي مع بطاقات تعليمية واختبارات تدريبية.">AI-enhanced study tools with flashcards and practice tests.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Tier" data-ar="طبقة مجانية">Free Tier</span>
+              <span class="tool-tag" data-en="Study" data-ar="دراسة">Study</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://www.khanacademy.org/khan-labs', '_blank')">
+            <div class="tool-icon" style="background-color: #14bf96; color: white;">🧪</div>
+            <div class="tool-name">Khanmigo</div>
+            <div class="tool-description" data-en="AI tutor from Khan Academy that helps with learning and homework." data-ar="معلم ذكي من أكاديمية خان يساعد في التعلم والواجبات المنزلية.">AI tutor from Khan Academy that helps with learning and homework.</div>
+            <div>
+              <span class="tool-tag" data-en="Free Trial" data-ar="تجربة مجانية">Free Trial</span>
+              <span class="tool-tag" data-en="Tutor" data-ar="معلم">Tutor</span>
+            </div>
+          </div>
+          <div class="ai-tool-card" onclick="window.open('https://www.wolframalpha.com/', '_blank')">
+            <div class="tool-icon" style="background-color: #d61f06; color: white;">🔍</div>
+            <div class="tool-name">Wolfram Alpha</div>
+            <div class="tool-description" data-en="Computational intelligence for math, science, and data analysis." data-ar="ذكاء حسابي للرياضيات والعلوم وتحليل البيانات.">Computational intelligence for math, science, and data analysis.</div>
+            <div>
+              <span class="tool-tag" data-en="Free" data-ar="مجاني">Free</span>
+              <span class="tool-tag" data-en="Research" data-ar="بحث">Research</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-container" id="inputContainer">
+      <div class="input-box">
+        <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off">
+        <div class="input-actions">
+          <div class="file-upload">
+            <button class="file-upload-btn" title="Upload file">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 12.586L16.243 16.83L14.828 18.243L13 16.415V22H11V16.413L9.172 18.243L7.757 16.828L12 12.586ZM12 2C13.717 2 15.372 2.69 16.243 3.757L12 8L7.757 3.757C8.628 2.69 10.283 2 12 2ZM12 4C11.431 4 10.861 4.12 10.29 4.353L12 6.062L13.71 4.353C13.139 4.12 12.569 4 12 4ZM3.757 7.757L8 12L3.757 16.243C2.69 15.372 2 13.717 2 12C2 10.283 2.69 8.628 3.757 7.757ZM20.243 7.757C21.31 8.628 22 10.283 22 12C22 13.717 21.31 15.372 20.243 16.243L16 12L20.243 7.757Z"></path>
+              </svg>
+            </button>
+            <input type="file" id="fileInput" multiple>
+          </div>
+          <button id="sendButton" onclick="sendMessage()" data-en="Send" data-ar="إرسال">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2 data-en="Chat History" data-ar="سجل المحادثات">Chat History</h2>
+    </div>
+    <div class="sidebar-actions">
+      <button class="clear-all-btn" onclick="clearAllChats()" data-en="Delete All" data-ar="حذف الكل">Delete All</button>
+    </div>
+    <div id="historyList"></div>
+    <div class="sidebar-footer">
+      <button class="new-chat-btn" onclick="newChat()" data-en="New Chat" data-ar="محادثة جديدة">New Chat</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let history = JSON.parse(localStorage.getItem('chatHistory')) || [];
+  let currentChat = [];
+  let currentTheme = localStorage.getItem('theme') || 'light';
+  let uploadedFiles = [];
+  let currentMode = localStorage.getItem('chatMode') || 'chat'; // Default to chat mode
+  let sidebarVisible = localStorage.getItem('sidebarVisible') !== 'false';
+  let isWaitingForResponse = false;
+  let currentLanguage = localStorage.getItem('language') || 'en';
+
+  // Apply saved theme on load
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  updateThemeIcon();
+  
+  // Apply saved mode on load
+  setMode(currentMode);
+  
+  // Apply saved sidebar visibility on load
+  setSidebarVisibility(sidebarVisible);
+
+  // Apply saved language on load
+  setLanguage(currentLanguage);
+
+  // Add welcome message on first load
+  if (currentChat.length === 0) {
+    setTimeout(() => {
+      const welcomeMessage = currentLanguage === 'en' 
+        ? 'Hello! I am your AI assistant. How can I help you today?' 
+        : 'مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟';
+      addMessage('bot', welcomeMessage);
+    }, 500);
+  }
+
+  async function sendMessage() {
+    if (isWaitingForResponse) return;
+    
+    const input = document.getElementById('userInput');
+    const message = input.value.trim();
+    const sendButton = document.getElementById('sendButton');
+    
+    if (!message && uploadedFiles.length === 0) return;
+    
+    // Create message content
+    let messageContent = message;
+    
+    // Add message to chat
+    addMessage('user', messageContent);
+    input.value = '';
+    
+    // Handle files if any
+    if (uploadedFiles.length > 0) {
+      const fileMessage = createFileMessage(uploadedFiles);
+      addMessage('user', fileMessage, true);
+      uploadedFiles = [];
+      document.getElementById('filePreviewContainer').innerHTML = '';
+    }
+
+    // Focus back on input after sending
+    setTimeout(() => input.focus(), 0);
+
+    // Show typing indicator
+    showTypingIndicator();
+    
+    // Disable send button while waiting for response
+    isWaitingForResponse = true;
+    sendButton.disabled = true;
+
+    try {
+      // Get AI response
+      const response = await getAIResponse(messageContent);
+      
+      // Remove typing indicator
+      hideTypingIndicator();
+      
+      // Add AI response to chat
+      addMessage('bot', response);
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      hideTypingIndicator();
+      const errorMessage = currentLanguage === 'en' 
+        ? 'Sorry, an error occurred while processing your request. Please try again.' 
+        : 'عذراً، حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.';
+      addMessage('bot', errorMessage);
+    } finally {
+      // Re-enable send button
+      isWaitingForResponse = false;
+      sendButton.disabled = false;
+    }
+  }
+
+  function showTypingIndicator() {
+    const chatBox = document.getElementById('chatBox');
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'typing-indicator';
+    typingIndicator.id = 'typingIndicator';
+    typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+    chatBox.appendChild(typingIndicator);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function hideTypingIndicator() {
+    const typingIndicator = document.getElementById('typingIndicator');
+    if (typingIndicator) {
+      typingIndicator.remove();
+    }
+  }
+
+  async function getAIResponse(message) {
+    // الحصول على النموذج المختار
+    const selectedModel = document.getElementById('aiModelSelect').value;
+    
+    // محاكاة تأخير استجابة API مع أوقات مختلفة حسب النموذج
+    let delay;
+    if (selectedModel === 'gpt-4' || selectedModel === 'claude') {
+      // النماذج المتقدمة تستغرق وقتًا أطول
+      delay = Math.floor(Math.random() * 2000) + 2000;
+    } else {
+      // النماذج الأسرع
+      delay = Math.floor(Math.random() * 1000) + 800;
+    }
+    
+    await new Promise(resolve => setTimeout(resolve, delay));
+    
+    // إضافة بادئة للرد حسب النموذج
+    let modelPrefix = '';
+    if (selectedModel === 'gpt-3.5') {
+      modelPrefix = '';  // بدون بادئة للنموذج الافتراضي
+    } else if (selectedModel === 'gpt-4') {
+      modelPrefix = currentLanguage === 'en' ? 'As an advanced GPT-4 model, ' : 'كنموذج GPT-4 المتقدم، ';
+    } else if (selectedModel === 'claude') {
+      modelPrefix = currentLanguage === 'en' ? 'I am Claude from Anthropic, ' : 'أنا Claude من Anthropic، ';
+    } else if (selectedModel === 'llama') {
+      modelPrefix = currentLanguage === 'en' ? 'As a Llama model from Meta, ' : 'كنموذج Llama من Meta، ';
+    } else if (selectedModel === 'gemini') {
+      modelPrefix = currentLanguage === 'en' ? 'As a Gemini model from Google, ' : 'كنموذج Gemini من Google، ';
+    }
+    
+    // استجابات مخصصة حسب نوع الرسالة والنموذج
+    if (message.includes('hello') || message.includes('hi') || message.includes('مرحبا') || message.includes('السلام عليكم') || message.includes('أهلا')) {
+      return currentLanguage === 'en' 
+        ? `${modelPrefix}Hello! How can I help you today?` 
+        : `${modelPrefix}مرحباً! كيف يمكنني مساعدتك اليوم؟`;
+    } else if (message.includes('name') || message.includes('who are you') || message.includes('اسمك') || message.includes('من أنت')) {
+      if (selectedModel === 'gpt-3.5') {
+        return currentLanguage === 'en'
+          ? 'I am ChatGPT 3.5, an AI assistant developed by OpenAI. How can I help you?'
+          : 'أنا نموذج ChatGPT 3.5، مساعد ذكي مطور بواسطة OpenAI. كيف يمكنني مساعدتك؟';
+      } else if (selectedModel === 'gpt-4') {
+        return currentLanguage === 'en'
+          ? 'I am ChatGPT 4, the latest version of OpenAI\'s AI models. I have advanced capabilities in understanding language, logic, and context. How can I assist you today?'
+          : 'أنا نموذج ChatGPT 4، أحدث إصدار من نماذج OpenAI للذكاء الاصطناعي. أتميز بقدرات متقدمة في فهم اللغة والمنطق والسياق. كيف يمكنني مساعدتك اليوم؟';
+      } else if (selectedModel === 'claude') {
+        return currentLanguage === 'en'
+          ? 'I am Claude, an AI assistant developed by Anthropic. I\'m designed to be helpful, harmless, and honest. How can I assist you?'
+          : 'أنا Claude، مساعد ذكي مطور بواسطة Anthropic. تم تصميمي لأكون مفيدًا وآمنًا ومتوافقًا مع القيم البشرية. كيف يمكنني مساعدتك؟';
+      } else if (selectedModel === 'llama') {
+        return currentLanguage === 'en'
+          ? 'I am a Llama model developed by Meta. I\'m an open-source language model designed to assist with a variety of tasks. How can I help you today?'
+          : 'أنا نموذج Llama المطور بواسطة Meta. أنا نموذج لغوي مفتوح المصدر مصمم للمساعدة في مجموعة متنوعة من المهام. كيف يمكنني مساعدتك اليوم؟';
+      } else if (selectedModel === 'gemini') {
+        return currentLanguage === 'en'
+          ? 'I am Gemini, an advanced multimodal model from Google. I can understand text, images, video, and audio. How can I assist you today?'
+          : 'أنا Gemini، نموذج متعدد الوسائط متقدم من Google. يمكنني فهم النصوص والصور والفيديو والصوت. كيف يمكنني مساعدتك اليوم؟';
+      }
+    } else if (message.includes('thank') || message.includes('thanks') || message.includes('شكرا') || message.includes('شكراً')) {
+      return currentLanguage === 'en'
+        ? `${modelPrefix}You're welcome! Is there anything else you need help with?`
+        : `${modelPrefix}العفو! سعيد بمساعدتك. هل هناك شيء آخر تحتاج إليه؟`;
+    } else if (message.includes('weather') || message.includes('الطقس') || message.includes('الجو')) {
+      if (selectedModel === 'gpt-4' || selectedModel === 'gemini') {
+        return currentLanguage === 'en'
+          ? `${modelPrefix}I'm sorry, I don't have access to real-time weather information. However, I can help you understand general weather patterns or interpret weather forecasts if you have specific data you'd like to discuss.`
+          : `${modelPrefix}للأسف لا يمكنني الوصول إلى معلومات الطقس الحالية في الوقت الفعلي. ومع ذلك، يمكنني مساعدتك في فهم أنماط الطقس العامة أو تفسير تنبؤات الطقس إذا كانت لديك بيانات محددة ترغب في مناقشتها.`;
+      } else {
+        return currentLanguage === 'en'
+          ? `${modelPrefix}I'm sorry, I don't have access to current weather information. You can use specialized weather websites for accurate information.`
+          : `${modelPrefix}للأسف لا يمكنني الوصول إلى معلومات الطقس الحالية. يمكنك استخدام مواقع الطقس المتخصصة للحصول على معلومات دقيقة.`;
+      }
+    } else if (message.includes('time') || message.includes('date') || message.includes('وقت') || message.includes('ساعة') || message.includes('تاريخ')) {
+      const now = new Date();
+      return currentLanguage === 'en'
+        ? `${modelPrefix}The current server time is ${now.toLocaleTimeString()} and the date is ${now.toLocaleDateString()}`
+        : `${modelPrefix}الوقت الحالي على الخادم هو ${now.toLocaleTimeString()} والتاريخ هو ${now.toLocaleDateString('ar-SA')}`;
+    } else {
+      // استجابات عامة مختلفة حسب النموذج
+      if (selectedModel === 'gpt-3.5') {
+        const genericResponsesEn = [
+          'Thank you for your question. I can help you with various topics such as finding information, answering questions, or providing suggestions.',
+          'That\'s an interesting question! Could you provide more details so I can help you better?',
+          'I understand what you\'re asking about. There are several aspects to this topic. Is there a specific aspect you\'d like to focus on?',
+          'I\'m here to help with any questions you have. Can I provide additional information on this topic?',
+          'Good question! Let me think about the best way to answer it. Is there something specific you\'re looking for?'
+        ];
+        
+        const genericResponsesAr = [
+          'شكراً على سؤالك. يمكنني مساعدتك في العديد من المجالات مثل البحث عن معلومات، الإجابة على الأسئلة، أو تقديم اقتراحات.',
+          'هذا سؤال مثير للاهتمام! هل يمكنك إخباري بمزيد من التفاصيل حتى أتمكن من مساعدتك بشكل أفضل؟',
+          'أفهم ما تسأل عنه. هناك عدة جوانب لهذا الموضوع. هل هناك جانب معين تريد التركيز عليه؟',
+          'أنا هنا للمساعدة في أي استفسارات لديك. هل يمكنني تقديم معلومات إضافية حول هذا الموضوع؟',
+          'سؤال جيد! دعني أفكر في أفضل طريقة للإجابة عليه. هل هناك شيء محدد تبحث عنه؟'
+        ];
+        
+        const genericResponses = currentLanguage === 'en' ? genericResponsesEn : genericResponsesAr;
+        return genericResponses[Math.floor(Math.random() * genericResponses.length)];
+      } else if (selectedModel === 'gpt-4') {
+        return currentLanguage === 'en'
+          ? `${modelPrefix}Thank you for your question. It seems you're interested in an intriguing topic. To provide a more accurate and helpful answer, could you clarify more about your inquiry? I'm here to assist you with the best information and analysis available.`
+          : `${modelPrefix}أشكرك على طرح هذا السؤال. يبدو أنك مهتم بموضوع مثير للاهتمام. لتقديم إجابة أكثر دقة وفائدة، هل يمكنك توضيح المزيد عن استفسارك؟ أنا هنا لمساعدتك بأفضل المعلومات والتحليلات المتاحة.`;
+      } else if (selectedModel === 'claude') {
+        return currentLanguage === 'en'
+          ? `${modelPrefix}Thank you for reaching out. I always try to provide balanced and helpful answers. Could you share more details about what you're specifically looking for? I'd be happy to assist based on your precise needs.`
+          : `${modelPrefix}شكراً لتواصلك معي. أحاول دائماً تقديم إجابات متوازنة ومفيدة. هل يمكنك مشاركة المزيد من التفاصيل حول ما تبحث عنه تحديداً؟ سأكون سعيداً بتقديم المساعدة بناءً على احتياجا��ك الدقيقة.`;
+      } else if (selectedModel === 'llama') {
+        return currentLanguage === 'en'
+          ? `${modelPrefix}Hello! I'm here to help answer your questions. Please provide more information about your query so I can give a more specific and helpful response.`
+          : `${modelPrefix}مرحباً! أنا هنا للمساعدة في الإجابة على أسئلتك. يرجى تقديم المزيد من المعلومات حول استفسارك لأتمكن من تقديم إجابة أكثر تحديداً وفائدة.`;
+      } else if (selectedModel === 'gemini') {
+        return currentLanguage === 'en'
+          ? `${modelPrefix}Thank you for your question. As a multimodal model, I can help with a variety of topics. Could you clarify your query further or share any images or additional information that might help me provide a better answer?`
+          : `${modelPrefix}شكراً لسؤالك. كنموذج متعدد الوسائط، يمكنني مساعدتك في مجموعة متنوعة من المواضيع. هل يمكنك توضيح استفسارك أكثر أو مشاركة أي صور أو معلومات إضافية قد تساعدني في تقديم إجابة أفضل؟`;
+      }
+    }
+  }
+
+  function createFileMessage(files) {
+    let fileInfo = '';
+    files.forEach(file => {
+      fileInfo += `<div class="file-item">
+        <strong>${file.name}</strong> (${formatFileSize(file.size)})
+      </div>`;
+    });
+    return `<div class="files-container">${fileInfo}</div>`;
+  }
+
+  function addMessage(sender, text, isHTML = false) {
+    const chatBox = document.getElementById('chatBox');
+    const msg = document.createElement('div');
+    msg.className = `message ${sender}`;
+    
+    // إضافة معلومات النموذج للرسائل من البوت
+    if (sender === 'bot' && !isHTML) {
+      const selectedModel = document.getElementById('aiModelSelect').value;
+      const modelInfo = document.createElement('div');
+      modelInfo.className = 'model-info';
+      modelInfo.textContent = getModelDisplayName(selectedModel);
+      msg.appendChild(modelInfo);
+    }
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    
+    if (isHTML) {
+      contentDiv.innerHTML = text;
+    } else {
+      contentDiv.textContent = text;
+    }
+    
+    msg.appendChild(contentDiv);
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // حفظ النموذج المستخدم مع الرسالة إذا كانت من البوت
+    let messageData = { sender, text, isHTML };
+    if (sender === 'bot') {
+      messageData.model = document.getElementById('aiModelSelect').value;
+    }
+    
+    currentChat.push(messageData);
+  }
+
+  function getModelDisplayName(modelId) {
+    const modelNames = {
+      'gpt-3.5': 'ChatGPT 3.5',
+      'gpt-4': 'ChatGPT 4',
+      'claude': 'Claude',
+      'llama': 'Meta Llama',
+      'gemini': 'Google Gemini'
+    };
+    return modelNames[modelId] || modelId;
+  }
+
+  function newChat() {
+    if (currentChat.length > 0) {
+      const timestamp = new Date().toLocaleString();
+      history.unshift({
+        messages: currentChat,
+        title: currentChat[0]?.text?.slice(0, 20) + '...' || 'New Chat',
+        date: timestamp
+      });
+      localStorage.setItem('chatHistory', JSON.stringify(history));
+      renderHistory();
+    }
+    currentChat = [];
+    document.getElementById('chatBox').innerHTML = '';
+    document.getElementById('filePreviewContainer').innerHTML = '';
+    uploadedFiles = [];
+    
+    // Switch to chat mode when starting a new chat
+    setMode('chat');
+    
+    // Add welcome message
+    setTimeout(() => {
+      const welcomeMessage = currentLanguage === 'en' 
+        ? 'Hello! I am your AI assistant. How can I help you today?' 
+        : 'مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟';
+      addMessage('bot', welcomeMessage);
+    }, 500);
+  }
+
+  function renderHistory() {
+    const historyList = document.getElementById('historyList');
+    historyList.innerHTML = '';
+    
+    if (history.length === 0) {
+      const emptyState = document.createElement('div');
+      emptyState.textContent = currentLanguage === 'en' ? 'No chat history yet' : 'لا يوجد سجل محادثات بعد';
+      emptyState.style.textAlign = 'center';
+      emptyState.style.color = 'var(--color-text-secondary)';
+      emptyState.style.padding = '20px 0';
+      historyList.appendChild(emptyState);
+      return;
+    }
+    
+    history.forEach((chat, index) => {
+      const item = document.createElement('div');
+      item.className = 'history-item';
+      item.textContent = chat.title || (currentLanguage === 'en' ? 'Chat' : 'محادثة');
+      
+      // Add delete button
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.innerHTML = '×';
+      deleteBtn.title = currentLanguage === 'en' ? 'Delete chat' : 'حذف المحادثة';
+      deleteBtn.onclick = (e) => {
+        e.stopPropagation();
+        deleteChat(index);
+      };
+      
+      item.appendChild(deleteBtn);
+      item.onclick = () => {
+        loadChat(index);
+        setMode('chat');
+      };
+      historyList.appendChild(item);
+    });
+  }
+
+  function deleteChat(index) {
+    const confirmMessage = currentLanguage === 'en' 
+      ? 'Are you sure you want to delete this chat?' 
+      : 'هل أنت متأكد أنك تريد حذف هذه المحادثة؟';
+    
+    if (confirm(confirmMessage)) {
+      history.splice(index, 1);
+      localStorage.setItem('chatHistory', JSON.stringify(history));
+      renderHistory();
+    }
+  }
+
+  function clearAllChats() {
+    if (history.length === 0) return;
+    
+    const confirmMessage = currentLanguage === 'en' 
+      ? 'Are you sure you want to delete all chats?' 
+      : 'هل أنت متأكد أنك تريد حذف جميع المحادثات؟';
+    
+    if (confirm(confirmMessage)) {
+      history = [];
+      localStorage.setItem('chatHistory', JSON.stringify(history));
+      renderHistory();
+    }
+  }
+
+  function loadChat(index) {
+    currentChat = [...history[index].messages];
+    document.getElementById('chatBox').innerHTML = '';
+    currentChat.forEach(msg => {
+      if (msg.isHTML) {
+        addMessage(msg.sender, msg.text, true);
+      } else {
+        addMessage(msg.sender, msg.text);
+      }
+    });
+  }
+
+  // Mode switching
+  function setMode(mode) {
+    currentMode = mode;
+    localStorage.setItem('chatMode', mode);
+    
+    const chatBox = document.getElementById('chatBox');
+    const aiDirectory = document.getElementById('aiDirectory');
+    const inputContainer = document.getElementById('inputContainer');
+    const chatModeBtn = document.getElementById('chatModeBtn');
+    const directoryModeBtn = document.getElementById('directoryModeBtn');
+    
+    if (mode === 'chat') {
+      chatBox.style.display = 'flex';
+      aiDirectory.style.display = 'none';
+      inputContainer.style.display = 'block';
+      chatModeBtn.classList.add('active');
+      directoryModeBtn.classList.remove('active');
+    } else {
+      chatBox.style.display = 'none';
+      aiDirectory.style.display = 'flex';
+      inputContainer.style.display = 'none';
+      chatModeBtn.classList.remove('active');
+      directoryModeBtn.classList.add('active');
+    }
+  }
+
+  // Sidebar toggle functionality
+  function toggleSidebar() {
+    sidebarVisible = !sidebarVisible;
+    setSidebarVisibility(sidebarVisible);
+    localStorage.setItem('sidebarVisible', sidebarVisible);
+  }
+
+  function setSidebarVisibility(visible) {
+    const sidebar = document.getElementById('sidebar');
+    if (visible) {
+      sidebar.classList.remove('hidden');
+    } else {
+      sidebar.classList.add('hidden');
+    }
+    
+    // Update sidebar toggle icon
+    updateSidebarToggleIcon();
+  }
+  
+  function updateSidebarToggleIcon() {
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    // You can update the icon here if needed
+  }
+
+  // Language toggle functionality
+  function toggleLanguage() {
+    const newLanguage = currentLanguage === 'en' ? 'ar' : 'en';
+    setLanguage(newLanguage);
+    localStorage.setItem('language', newLanguage);
+  }
+
+  function setLanguage(language) {
+    currentLanguage = language;
+    document.body.setAttribute('lang', language);
+    document.body.setAttribute('dir', language === 'ar' ? 'rtl' : 'ltr');
+    
+    // Update all translatable elements
+    const translatableElements = document.querySelectorAll('[data-en][data-ar]');
+    translatableElements.forEach(element => {
+      element.textContent = element.getAttribute(`data-${language}`);
+    });
+    
+    // Update input placeholder
+    const userInput = document.getElementById('userInput');
+    userInput.placeholder = language === 'en' ? 'Type a message...' : 'اكتب رسالة...';
+    
+    // Update model selector title
+    const modelSelector = document.getElementById('aiModelSelect');
+    modelSelector.title = language === 'en' ? 'Select AI Model' : 'اختر نموذج الذكاء الاصطناعي';
+    
+    // Update button titles
+    document.getElementById('languageToggle').title = language === 'en' ? 'Toggle language' : 'تبديل اللغة';
+    document.getElementById('sidebarToggle').title = language === 'en' ? 'Toggle sidebar' : 'تبديل الشريط الجانبي';
+    document.getElementById('themeToggle').title = language === 'en' ? 'Toggle dark/light mode' : 'تبديل الوضع المظلم/الفاتح';
+    
+    // Refresh history list with translated labels
+    renderHistory();
+  }
+
+  document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
+  document.getElementById('languageToggle').addEventListener('click', toggleLanguage);
+  document.getElementById('chatModeBtn').addEventListener('click', () => setMode('chat'));
+  document.getElementById('directoryModeBtn').addEventListener('click', () => setMode('directory'));
+
+  // File upload handling
+  document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+
+  function handleFileUpload(e) {
+    const files = e.target.files;
+    if (!files.length) return;
+    
+    uploadedFiles = Array.from(files);
+    renderFilePreview();
+  }
+
+  function renderFilePreview() {
+    const container = document.getElementById('filePreviewContainer');
+    container.innerHTML = '';
+    
+    uploadedFiles.forEach((file, index) => {
+      const preview = document.createElement('div');
+      preview.className = 'file-preview';
+      
+      // Create preview content based on file type
+      let previewContent = '';
+      if (file.type.startsWith('image/')) {
+        const imgUrl = URL.createObjectURL(file);
+        previewContent = `<img src="${imgUrl}" alt="${file.name}">`;
+      } else {
+        previewContent = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+      }
+      
+      preview.innerHTML = `
+        ${previewContent}
+        <div class="file-preview-info">
+          <div class="file-preview-name">${file.name}</div>
+          <div class="file-preview-size">${formatFileSize(file.size)}</div>
+        </div>
+        <button class="file-preview-remove" onclick="removeFile(${index})">×</button>
+      `;
+      
+      container.appendChild(preview);
+    });
+  }
+
+  function removeFile(index) {
+    uploadedFiles.splice(index, 1);
+    renderFilePreview();
+  }
+
+  function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    else return (bytes / 1048576).toFixed(1) + ' MB';
+  }
+
+  // Theme toggle functionality
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+  function toggleTheme() {
+    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    localStorage.setItem('theme', currentTheme);
+    updateThemeIcon();
+  }
+
+  function updateThemeIcon() {
+    const moonPath = "M12 22C17.5228 22 22 17.5228 22 12C22 11.5373 21.3065 11.4608 21.0672 11.8568C19.9289 13.7406 17.8615 15 15.5 15C11.9101 15 9 12.0899 9 8.5C9 6.13845 10.2594 4.07105 12.1432 2.93276C12.5392 2.69347 12.4627 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z";
+    const sunPath = "M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z";
+    
+    const themeIcon = document.getElementById('themeIcon');
+    const path = themeIcon.querySelector('path');
+    
+    if (currentTheme === 'dark') {
+      path.setAttribute('d', moonPath);
+    } else {
+      path.setAttribute('d', sunPath);
+    }
+  }
+
+  // Handle Enter key press in input
+  document.getElementById('userInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  // حفظ واسترجاع النموذج المختار
+  let savedModel = localStorage.getItem('aiModel') || 'gpt-3.5';
+  document.getElementById('aiModelSelect').value = savedModel;
+
+  // حفظ النموذج المختار عند التغيير
+  document.getElementById('aiModelSelect').addEventListener('change', function() {
+    localStorage.setItem('aiModel', this.value);
+  });
+
+  // Initialize
+  renderHistory();
+</script>
+</body>
+</html>
+
